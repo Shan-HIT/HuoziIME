@@ -3,7 +3,8 @@
 ## 📺 Demo Preview
 
 <div align="center">
-https://github.com/user-attachments/assets/6e8e1270-d859-4d7b-ac4f-5266201af3e6
+<video src="https://github.com/user-attachments/assets/6e8e1270-d859-4d7b-ac4f-5266201af3e6" controls="controls" width="100%">
+  </video>
 </div>
 
 ## 🚧 Source Code & Installation
