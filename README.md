@@ -3,9 +3,7 @@
 ## 📺 Demo Preview
 
 <div align="center">
-  <video src="assets/HuoziIME.mp4" controls="controls" width="100%">
-    Your browser does not support the video tag. Please <a href="assets/HuoziIME.mp4">click here to download and watch</a>.
-  </video>
+https://github.com/user-attachments/assets/6e8e1270-d859-4d7b-ac4f-5266201af3e6
 </div>
 
 ## 🚧 Source Code & Installation
