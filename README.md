@@ -63,7 +63,7 @@ gradle :app:assembleOnlineDebug
 | :--- | :---: | :--- |
 | **Source Code** | ![Open Source](https://img.shields.io/badge/Status-Open%20Source-success) | The core codebase is already public in this repository. |
 | **Model Weights** | ![Coming Soon](https://img.shields.io/badge/Status-Coming%20Soon-lightgrey) | Model packaging/release plan is being prepared. |
-| **APK Installer** | ![Coming Soon](https://img.shields.io/badge/Status-Coming%20Soon-lightgrey) | Build artifacts and release pipeline are in progress. |
+| **APK Installer** | ![Released](https://img.shields.io/badge/Status-Released-success) | v1.0.0-beta is now available in Releases. |
 
 ---
 
