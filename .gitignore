@@ -1,0 +1,40 @@
+*.iml
+
+# === Build / Gradle ===
+/build/
+**/build/
+.externalNativeBuild/
+captures/
+
+# Gradle cache & wrappers
+.gradle/
+gradle/wrapper/
+gradlew
+gradlew.bat
+local.properties
+
+# === IDE / Editor ===
+*.iml
+.idea/
+
+# === Keystores / signing ===
+*.jks
+keystore/keystore.properties
+
+# === Native / libs / artifacts ===
+model/
+model/*
+*.bin
+*.meta
+*.gguf
+
+# === Logs / reports / profiling ===
+*.log
+perf.data
+report*
+annotated_files
+
+# === OS / system files ===
+.DS_Store
+
+__pycache__/

@@ -1,0 +1,176 @@
+// 文件: D:\androidstudio\repo\YuyanIme\yuyansdk\build.gradle （已修改的完整内容）
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'com.google.devtools.ksp'
+    id 'kotlin-parcelize'
+    id 'kotlinx-serialization'
+    id 'com.chaquo.python' version '16.1.0' apply false
+}
+static def versionNameDate() {
+    return new Date().format("yyyyMMdd.HH", TimeZone.getTimeZone("GMT+8"))
+}
+static def getAppGitHead() {
+    return "git rev-parse HEAD".execute().text.trim()
+}
+static def getAppBuildTime() {
+    return "git log -1 --pretty=%ai".execute().text.trim()
+}
+android {
+    compileSdk 36
+    namespace 'com.yuyan.imemodule'
+    ndkVersion "25.2.9519653"
+    defaultConfig {
+        minSdk 23
+        targetSdk 35
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // NDK ABI 配置
+        ndk {
+            abiFilters 'arm64-v8a', "x86", "x86_64"
+//            abiFilters 'arm64-v8a'
+        }
+
+        externalNativeBuild {
+            cmake {
+                // C++ 编译选项
+//                cppFlags "-std=c++17 -fexceptions -O3"
+                // 向 CMake 传递的构建参数，确保 -DGGML_OPENCL=ON 被正确传入
+                arguments "-DGGML_BLAS=ON",
+                        "-DGGML_BLAS_VENDOR=OpenBLAS",
+                        "-DGGML_LLAMAFILE=ON",
+                        "-DANDROID_STL=c++_shared",
+                        // 移除不必要的 llama 子目标
+                        "-DLLAMA_BUILD_TESTS=OFF",
+                        "-DLLAMA_BUILD_EXAMPLES=OFF",
+                        "-DLLAMA_BUILD_TOOLS=OFF",
+                        "-DLLAMA_BUILD_SERVER=OFF",
+                        // 开启 OpenCL 后端(还没实现)
+//                          "-DGGML_OPENCL=ON",
+                        // 开启链接时代码优化
+                          "-DGGML_LTO=ON",
+                        "-DBUILD_SHARED_LIBS=OFF",   // 核心：构建静态库以提升性能和简化部署
+                        "-DGGML_STATIC=ON" ,         // 确保 ggml 也被静态链接
+                        "-DGGML_OPENMP=ON" ,         // 使用 OpenMP 进行多核并行计算
+                        "-DGGML_ACCELERATE=OFF"
+                // vulkan支持，有点难配啊
+//                          "-DGGML_VULKAN=ON",
+//                          "-DGGML_VULKAN_RUNTIME=ON"
+//
+//                // 移除所有不必要的构建目标
+//                "-DLLAMA_BUILD_TESTS=OFF",
+//                "-DLLAMA_BUILD_EXAMPLES=OFF",
+//                "-DLLAMA_BUILD_TOOLS=OFF",
+//                "-DLLAMA_BUILD_SERVER=OFF",
+//
+//                // 关闭所有非 arm64 CPU 的后端和功能
+//                "-DGGML_ACCELERATE=OFF",     // 关闭苹果专用框架
+//                "-DGGML_CUDA=OFF",           // 关闭 CUDA
+//                "-DGGML_OPENCL=OFF",         // 关闭 OpenCL
+//                "-DGGML_VULKAN=OFF",         // 关闭 Vulkan
+//                "-DGGML_METAL=OFF",          // 关闭 Metal
+//                "-DGGML_LLAMAFILE=OFF"       // 关闭 llamafile 支持
+
+            }
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+        lintOptions {
+            abortOnError false
+        }
+        buildConfigField "String", "versionName", "\"${versionNameDate()}\""
+        buildConfigField "String", "AppCommitHead", "\"${getAppGitHead()}\""
+        buildConfigField "String", "AppBuildTime", "\"${getAppBuildTime()}\""
+    }
+    // 多渠道打包: app中多渠道配置要一致
+    flavorDimensions = ["default"]
+    productFlavors {
+        online {
+            dimension "default"
+            buildConfigField "Boolean", "offline", "false"
+            resValue("mipmap", "app_icon", "@mipmap/app_icon")
+        }
+        offline {
+            dimension "default"
+            buildConfigField "Boolean", "offline", "true"
+            resValue("mipmap", "app_icon", "@mipmap/app_icon")
+        }
+    }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
+            resValue("string", "app_name", "@string/ime_yuyan_name")
+        }
+        debug {
+            resValue("string", "app_name", "@string/ime_yuyan_name_debug")
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+    sourceSets {
+        offline {
+            jniLibs.srcDirs = ['libs', "src/offline/libs"]
+            manifest.srcFile('src/offline/AndroidManifest.xml')
+        }
+        online {
+            jniLibs.srcDirs = ['libs', "src/online/libs"]
+            manifest.srcFile('src/online/AndroidManifest.xml')
+        }
+    }
+    aaptOptions {
+        noCompress 'gguf'
+    }
+    compileOptions {
+        sourceCompatibility 17
+        targetCompatibility 17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'androidx.emoji2:emoji2:1.5.0'
+    implementation 'androidx.emoji2:emoji2-views:1.5.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.5'
+    implementation 'com.louiscad.splitties:splitties-resources:3.0.0'
+    implementation 'com.louiscad.splitties:splitties-views-dsl-recyclerview:3.0.0'
+    implementation 'com.louiscad.splitties:splitties-views-dsl-constraintlayout:3.0.0'
+    implementation 'com.louiscad.splitties:splitties-views-dsl-appcompat:3.0.0'
+    implementation 'androidx.exifinterface:exifinterface:1.3.7'
+    implementation "androidx.room:room-runtime:2.6.1"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.6'
+    ksp "androidx.room:room-compiler:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+}
+tasks.register('makeaar', Copy) {
+    from('build/outputs/aar/')
+    into('build/outputs/aar/')
+    include('imeModule-dev-debug.aar')
+    rename('imeModule-dev-debug.aar', 'imesdk_' + versionNameDate() + '.aar')
+}
+makeaar.dependsOn(build)

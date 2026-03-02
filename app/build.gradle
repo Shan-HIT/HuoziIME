@@ -1,0 +1,108 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk 36
+    namespace 'com.yuyan'
+    defaultConfig {
+        applicationId "com.yuyan.pinyin"
+        minSdk 23
+        targetSdk 36
+        versionCode Integer.valueOf(versionCodeDate())
+        versionName versionNameDate()
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        ndk {
+            abiFilters 'arm64-v8a', "x86", "x86_64"
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        lintOptions {
+            abortOnError false
+        }
+    }
+    
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
+    signingConfigs {
+        release {
+            def keystoreFile = rootProject.file("keystore/keystore.properties")
+            if (keystoreFile.exists()) {
+                def keystoreProps = new Properties()
+                keystoreProps.load(new FileInputStream(keystoreFile))
+                storeFile file("${rootProject.projectDir}/keystore/" + keystoreProps["storeFile"])
+                storePassword keystoreProps["storePassword"]
+                keyAlias keystoreProps["keyAlias"]
+                keyPassword keystoreProps["keyPassword"]
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
+        }
+    }
+
+    flavorDimensions = ["default"]
+    productFlavors {
+        online {
+            dimension "default"
+            applicationIdSuffix  ".online"
+        }
+        offline {
+            dimension "default"
+            applicationIdSuffix  ".offline"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            applicationIdSuffix  ".release"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
+            signingConfig signingConfigs.debug
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+        }
+
+    }
+    compileOptions {
+        sourceCompatibility 17
+        targetCompatibility 17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    android.applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach {
+            outputFileName = "yuyanIme_${versionCodeDate()}_${variant.getProductFlavors()[0].name}_${variant.buildType.name}.apk"   
+        }
+    }
+}
+
+static def versionCodeDate() {
+    return new Date().format("yyyyMMddHH", TimeZone.getTimeZone("GMT+8"))
+}
+
+static def versionNameDate() {
+    return new Date().format("yyyyMMdd.HH", TimeZone.getTimeZone("GMT+8"))
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':yuyansdk')
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+}
