@@ -64,7 +64,23 @@ gradle :app:assembleOnlineDebug
 | **Source Code** | ![Open Source](https://img.shields.io/badge/Status-Open%20Source-success) | The core codebase is already public in this repository. |
 | **APK Installer** | ![Released](https://img.shields.io/badge/Status-Released-success) | v1.0.0-beta is now available in Releases. |
 ---
+## Acknowledgements
 
+This project stands on the shoulders of several excellent open source projects. Their ideas, code, and tooling made the development of HuoziIME possible.
+
+<div align="center">
+
+| Project | Contribution |
+| :--- | :--- |
+| [**YuyanIME**](https://github.com/gurecn/YuyanIme) | The original input method foundation that inspired and enabled the secondary development of HuoziIME. |
+| [**YuyanSDK**](https://github.com/gurecn/yuyansdk) | Core SDK support used for building the intelligent input experience and related capabilities. |
+| [**llama.cpp**](https://github.com/ggml-org/llama.cpp) | Efficient on-device LLM inference support that helps bring local model capability to the IME workflow. |
+| [**Qwen**](https://github.com/QwenLM/Qwen3) | The open model family that provides the language intelligence foundation behind the LLM-enhanced experience. |
+
+</div>
+
+> We sincerely thank the maintainers and contributors of these projects for advancing open source research and engineering.
+---
 ### Stay Tuned
 
 If you are interested in this project, please click **Star** or **Watch** on GitHub to receive the latest updates.
