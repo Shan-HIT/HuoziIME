@@ -64,6 +64,13 @@ gradle :app:assembleOnlineDebug
 | **Source Code** | ![Open Source](https://img.shields.io/badge/Status-Open%20Source-success) | The core codebase is already public in this repository. |
 | **APK Installer** | ![Released](https://img.shields.io/badge/Status-Released-success) | v1.0.0-beta is now available in Releases. |
 ---
+
+## Changelog
+
+* **v1.1.0-beta** *(Upcoming)*: Breakthrough in model post-training! Achieved major leaps in model alignment, responsiveness, and overall intelligence.
+* **v1.0.1-beta**: Fixed typing latency caused by multiple synchronization attempts and resolved the chat session clearing bug. General system optimizations.
+* **v1.0.0-beta**: Initial pre-release for the ACL 2026 Demo Track, including the core IME service and companion HuoziIME-Chat app.
+
 ## Acknowledgements
 
 This project stands on the shoulders of several excellent open source projects. Their ideas, code, and tooling made the development of HuoziIME possible.
