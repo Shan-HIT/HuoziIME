@@ -67,7 +67,7 @@ gradle :app:assembleOnlineDebug
 
 ## Changelog
 
-* **v1.1.0-beta** *(Upcoming)*: Breakthrough in model post-training! Achieved major leaps in model alignment, responsiveness, and overall intelligence.
+* **v1.1.0-beta** *(Upcoming)*: Breakthrough in model post-training! Achieved major leaps in model alignment, responsiveness, and overall intelligence.（📝 A quick note: I'm currently swamped with my thesis and internship 😭, so I haven't been able to push this update out as quickly as I'd like. But it's still coming — most likely by the end of May. 🙏 Thank you for your patience!）
 * **v1.0.1-beta**: Fixed typing latency caused by multiple synchronization attempts and resolved the chat session clearing bug. General system optimizations.
 * **v1.0.0-beta**: Initial pre-release for the ACL 2026 Demo Track, including the core IME service and companion HuoziIME-Chat app.
 
